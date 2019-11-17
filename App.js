@@ -35,6 +35,27 @@ export default class App extends Component {
 
     }
 
+    createFile = async (name) => {
+        try {
+            const response = await axios.post(`${SERVER_URL}/files`, qs.stringify({ name }), {
+                headers: {
+                    Authorization: `bearer ${this.state.token}`,
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-type': 'application/x-www-form-urlencoded',
+                },
+            });
+            if (response.status >= 200 && response.status <= 299) {
+                return response && response.data && response.data.id;
+            } else {
+                alert(res.status);
+            }
+        }
+        catch (e) {
+            alert('Error while requesting file infos');
+            return null;
+        }
+    };
+
     login = (email, password) => {
         axios.post(`${SERVER_URL}/users/login`, qs.stringify({email, password }), {
             headers: {
@@ -54,7 +75,7 @@ export default class App extends Component {
         }).catch(err => {
             alert('Error while login');
         })
-    }
+    };
 
     register = (email, password)  => {
 
@@ -79,6 +100,7 @@ export default class App extends Component {
             return <StateContext.Provider value={{
                 token: this.state.token,
                 login: this.login,
+                createFile: this.createFile,
                 register: this.register
             }}>
                 <AppTek/>
