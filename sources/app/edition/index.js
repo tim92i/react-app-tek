@@ -1,8 +1,9 @@
 import React from 'react';
 import io from 'socket.io-client';
 import { SERVER_URL } from 'react-native-dotenv';
+import Markdown from 'react-native-markdown-renderer';
 import { StateContext } from '../../state';
-import {KeyboardAvoidingView, StyleSheet, TextInput, Text, View} from 'react-native';
+import {KeyboardAvoidingView, StyleSheet, TextInput, Text, View, ScrollView} from 'react-native';
 
 export default class Edition extends React.Component {
 
@@ -42,6 +43,8 @@ export default class Edition extends React.Component {
         const { io, fileId, text, name } = this.state;
         const {file} = this.context;
         return (
+            <View style={styles.rootViewContainer}>
+                <View style={{height: '50%'}}>
             <KeyboardAvoidingView behavior={'padding'} enabled={true} style={styles.container}>
                 <Text style={styles.filename}>{name}</Text>
 
@@ -61,16 +64,25 @@ export default class Edition extends React.Component {
                     }/>
 
             </KeyboardAvoidingView>
+                </View>
+                <Text style={styles.previewStyle}> - Preview - </Text>
+                <ScrollView style={styles.scrollStyle}>
+                    <Markdown>{text}</Markdown>
+                </ScrollView>
+            </View>
         )
     }
 }
 
 const styles = StyleSheet.create({
+    rootViewContainer: {
+        height: '100%',
+        backgroundColor: '#F5FCFF'
+    },
     container: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F5FCFF',
     },
     input: {
         width: '80%',
@@ -83,5 +95,15 @@ const styles = StyleSheet.create({
     filename: {
         fontSize: 20,
         fontWeight: 'bold'
+    },
+    scrollStyle: {
+        height: '50%',
+        borderTopColor: 'black',
+        borderTopWidth: 1
+    },
+    previewStyle: {
+        width: '100%',
+        textAlign: 'center'
     }
+
 });
