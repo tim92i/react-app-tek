@@ -3,7 +3,7 @@ import { StyleSheet, View, Text } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import MainApp from './app';
-
+import Edit from './app/edition';
 import Login from './login';
 import Register from './register';
 import { StateContext } from './state';
@@ -19,7 +19,20 @@ const AuthNavigator = createStackNavigator({
     initialRouteName: 'Login',
 });
 
+
+const AppNavigator = createStackNavigator({
+    Home: {
+        screen: MainApp,
+    },
+    Edit: {
+        screen: Edit
+    }
+}, {
+    initialRouteName: 'Home',
+});
+
 const AuthApp = createAppContainer(AuthNavigator);
+const TekApp = createAppContainer(AppNavigator);
 
 export default class AppTek extends Component {
     static contextType = StateContext;
@@ -29,7 +42,7 @@ export default class AppTek extends Component {
                 return <AuthApp/>;
             }
             default: {
-                return <MainApp/>;
+                return <TekApp/>;
             }
 
         }
