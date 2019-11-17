@@ -24,9 +24,6 @@ export default class App extends Component {
                 token: parsed_data.token,
                 email: parsed_data.email
             });
-            //this.setState({
-            //    restored: true
-            //});
         } else {
             this.setState({
                 restored: true
@@ -34,6 +31,27 @@ export default class App extends Component {
         }
 
     }
+
+    getFileName = async (id) => {
+        try {
+            const response = await axios.get(`${SERVER_URL}/files/${id}`, {
+                headers: {
+                    Authorization: `bearer ${this.state.token}`,
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-type': 'application/x-www-form-urlencoded',
+                },
+            });
+            if (response.status >= 200 && response.status <= 299) {
+                return response && response.data && response.data.name;
+            } else {
+                alert(response.status);
+            }
+        } catch (e) {
+            alert('Error while requesting file infos');
+            return null;
+        }
+        return null;
+    };
 
     createFile = async (name) => {
         try {
@@ -47,7 +65,7 @@ export default class App extends Component {
             if (response.status >= 200 && response.status <= 299) {
                 return response && response.data && response.data.id;
             } else {
-                alert(res.status);
+                alert(response.status);
             }
         }
         catch (e) {
@@ -64,7 +82,7 @@ export default class App extends Component {
             },
         }).then(async (res) => {
             if (res.status >= 200 && res.status <= 299) {
-                AsyncStorage.setItem('@app:session', JSON.stringify({token: res.data.token, email}))
+                AsyncStorage.setItem('@app:session', JSON.stringify({token: res.data.token, email}));
                 this.setState({
                     token: res.data.token,
                     email
@@ -72,7 +90,7 @@ export default class App extends Component {
             } else {
                 alert(res.status);
             }
-        }).catch(err => {
+        }).catch(() => {
             alert('Error while login');
         })
     };
@@ -90,10 +108,10 @@ export default class App extends Component {
             } else {
                 alert(res.status);
             }
-        }).catch((err) => {
+        }).catch(() => {
             alert('Error while registering');
         });
-    }
+    };
 
     render() {
         if (this.state.restored) {
@@ -101,6 +119,7 @@ export default class App extends Component {
                 token: this.state.token,
                 login: this.login,
                 createFile: this.createFile,
+                getFileName: this.getFileName,
                 register: this.register
             }}>
                 <AppTek/>
