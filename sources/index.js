@@ -4,6 +4,8 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import MainApp from './app';
 import Edit from './app/edition';
+import QR from './app/qr';
+import Scanner from './app/scan';
 import Login from './login';
 import Register from './register';
 import { StateContext } from './state';
@@ -26,6 +28,12 @@ const AppNavigator = createStackNavigator({
     },
     Edit: {
         screen: Edit
+    },
+    Scanner: {
+        screen: Scanner
+    },
+    QR: {
+        screen: QR
     }
 }, {
     initialRouteName: 'Home',

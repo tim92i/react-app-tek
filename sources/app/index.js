@@ -20,6 +20,10 @@ export default class MainApp extends React.Component {
         }
     }
 
+    openScanScreen () {
+       this.props.navigation.navigate('Scanner');
+    }
+
     render() {
 
         return (
@@ -38,10 +42,15 @@ export default class MainApp extends React.Component {
                         title={'Create'}
                         onPress={() => this.openEditionScreen('CREATE')}
                     />
-                    <Text>or</Text>
+                    <Text>, </Text>
                     <Button
                         title={'Join'}
                         onPress={() => this.openEditionScreen('JOIN')}
+                    />
+                    <Text> or </Text>
+                    <Button
+                        title={'Scan'}
+                        onPress={() => this.openScanScreen()}
                     />
                 </View>
             </KeyboardAvoidingView>

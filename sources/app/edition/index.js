@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 import { SERVER_URL } from 'react-native-dotenv';
 import Markdown from 'react-native-markdown-renderer';
 import { StateContext } from '../../state';
-import {KeyboardAvoidingView, StyleSheet, TextInput, Text, View, ScrollView} from 'react-native';
+import {KeyboardAvoidingView, StyleSheet, TextInput, Text, View, ScrollView, Button} from 'react-native';
 
 export default class Edition extends React.Component {
 
@@ -38,32 +38,36 @@ export default class Edition extends React.Component {
 
     static contextType = StateContext;
 
+    onQr = (code) => {
+        this.props.navigation.navigate('QR', {code});
+    };
+
     render() {
 
         const { io, fileId, text, name } = this.state;
         const {file} = this.context;
         return (
             <View style={styles.rootViewContainer}>
-                <View style={{height: '50%'}}>
-            <KeyboardAvoidingView behavior={'padding'} enabled={true} style={styles.container}>
-                <Text style={styles.filename}>{name}</Text>
+                <View style={{height: '55%'}}>
+                    <KeyboardAvoidingView behavior={'padding'} enabled={true} style={styles.container}>
+                        <Text style={styles.filename}>{name}</Text>
 
-                    {file.action === "CREATE" ? <View >
-                            <Text>Id to join the doc edition :</Text>
-                            <Text selectable>{fileId}</Text>
-                    </View>
-                        : <Text>Edition of joined document</Text>}
-                <TextInput
-                    style={styles.input}
-                    multiline={true}
-                    numberOfLines={6}
-                    value={text}
-                    onChangeText={(text) => {
-                        io.emit('update', fileId, text);
-                        this.setState({text})}
-                    }/>
+                        {file.action === "CREATE" ? <View >
+                                <Text selectable>{fileId}</Text>
+                                <Button onPress={this.onQr.bind(this, fileId)} title={'Get QR Code'}/>
+                            </View>
+                            : <Text>Edition of joined document</Text>}
+                        <TextInput
+                            style={styles.input}
+                            multiline={true}
+                            numberOfLines={6}
+                            value={text}
+                            onChangeText={(text) => {
+                                io.emit('update', fileId, text);
+                                this.setState({text})}
+                            }/>
 
-            </KeyboardAvoidingView>
+                    </KeyboardAvoidingView>
                 </View>
                 <Text style={styles.previewStyle}> - Preview - </Text>
                 <ScrollView style={styles.scrollStyle}>

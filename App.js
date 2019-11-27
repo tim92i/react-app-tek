@@ -24,6 +24,9 @@ export default class App extends Component {
                 token: parsed_data.token,
                 email: parsed_data.email
             });
+            //this.setState({
+            //    restored: true
+            //});
         } else {
             this.setState({
                 restored: true
@@ -82,7 +85,7 @@ export default class App extends Component {
             },
         }).then(async (res) => {
             if (res.status >= 200 && res.status <= 299) {
-                AsyncStorage.setItem('@app:session', JSON.stringify({token: res.data.token, email}));
+                await AsyncStorage.setItem('@app:session', JSON.stringify({token: res.data.token, email}));
                 this.setState({
                     token: res.data.token,
                     email
